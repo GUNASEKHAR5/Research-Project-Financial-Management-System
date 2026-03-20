@@ -15,7 +15,14 @@ export const updateUser = async (id, data) => {
   return res.data.data;
 };
 
+// Soft-delete: sets is_active = false
 export const deleteUser = async (id) => {
   const res = await api.delete(`/users/${id}`);
   return res.data;
+};
+
+// Re-activate: sets is_active = true via PUT
+export const activateUser = async (id) => {
+  const res = await api.put(`/users/${id}`, { is_active: true });
+  return res.data.data;
 };

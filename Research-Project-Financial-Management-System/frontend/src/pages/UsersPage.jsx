@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Card from "../components/Card";
 import { Spinner, ErrorMsg } from "../components/PageState";
-import { getUsers, createUser, deleteUser } from "../services/userService";
+import { getUsers, createUser, deleteUser, activateUser } from "../services/userService";
 import { getInitials } from "../utils/helpers";
 import { useAuth } from "../context/AuthContext";
 
@@ -120,6 +120,16 @@ const UsersPage = () => {
     }
   };
 
+  const handleActivate = async (id, name) => {
+    if (!window.confirm(`Activate ${name}?`)) return;
+    try {
+      await activateUser(id);
+      load();
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to activate user.");
+    }
+  };
+
   if (showForm) {
     return <InviteUserForm onBack={() => setShowForm(false)} onCreated={() => { setShowForm(false); load(); }} />;
   }
@@ -186,11 +196,18 @@ const UsersPage = () => {
                     </td>
                     <td className="px-5 py-4 text-zinc-500 text-xs">{u.created_at?.slice(0, 10)}</td>
                     <td className="px-5 py-4">
-                      {u.id !== currentUser.id && u.is_active && (
-                        <button onClick={() => handleDeactivate(u.id, u.name)}
-                          className="text-xs text-rose-400 hover:text-rose-300 border border-rose-900 hover:border-rose-700 px-3 py-1 rounded-lg transition-colors">
-                          Deactivate
-                        </button>
+                      {u.id !== currentUser.id && (
+                        u.is_active ? (
+                          <button onClick={() => handleDeactivate(u.id, u.name)}
+                            className="text-xs text-rose-400 hover:text-rose-300 border border-rose-900 hover:border-rose-700 px-3 py-1 rounded-lg transition-colors">
+                            Deactivate
+                          </button>
+                        ) : (
+                          <button onClick={() => handleActivate(u.id, u.name)}
+                            className="text-xs text-emerald-400 hover:text-emerald-300 border border-emerald-900 hover:border-emerald-700 px-3 py-1 rounded-lg transition-colors">
+                            Activate
+                          </button>
+                        )
                       )}
                     </td>
                   </tr>

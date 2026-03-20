@@ -1,26 +1,26 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const LoginPage = () => {
-  const { login } = useAuth();
-  const [email,    setEmail]    = useState("");
-  const [password, setPassword] = useState("");
-  const [error,    setError]    = useState("");
-  const [loading,  setLoading]  = useState(false);
+  const { login }              = useAuth();
+  const navigate               = useNavigate();
+  const [email,    setEmail]   = useState("");
+  const [password, setPassword]= useState("");
+  const [error,    setError]   = useState("");
+  const [loading,  setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
     if (!email || !password) {
       setError("Email and password are required.");
       return;
     }
-
     setLoading(true);
     try {
       await login(email.trim(), password);
-      // AuthContext sets user → App re-renders to show dashboard
+      navigate("/dashboard", { replace: true });
     } catch (err) {
       setError(err.response?.data?.message || "Login failed. Check your credentials.");
     } finally {
@@ -37,6 +37,7 @@ const LoginPage = () => {
       }}
     >
       <div className="w-full max-w-md px-8 py-10 bg-zinc-900/80 border border-zinc-800 rounded-3xl shadow-2xl backdrop-blur">
+
         {/* Header */}
         <div className="mb-8 text-center">
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-600 mb-4">
@@ -70,7 +71,6 @@ const LoginPage = () => {
               className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 placeholder:text-zinc-600"
             />
           </div>
-
           <div>
             <label className="text-xs font-semibold text-zinc-400 uppercase tracking-widest block mb-1.5">
               Password
@@ -83,7 +83,6 @@ const LoginPage = () => {
               className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 placeholder:text-zinc-600"
             />
           </div>
-
           <button
             type="submit"
             disabled={loading}
@@ -96,9 +95,27 @@ const LoginPage = () => {
           </button>
         </form>
 
-        <p className="text-xs text-zinc-600 text-center mt-6">
-          Seed credentials — arjun@university.edu / Test@1234
-        </p>
+        <div className="mt-6 pt-5 border-t border-zinc-800">
+          <p className="text-xs text-zinc-600 text-center mb-2">Seed credentials</p>
+          <div className="space-y-1 text-xs text-zinc-500">
+            {[
+              { email: "arjun@university.edu",  role: "Admin" },
+              { email: "priya@university.edu",  role: "Faculty" },
+              { email: "ravi@university.edu",   role: "Finance" },
+              { email: "sneha@university.edu",  role: "Faculty" },
+            ].map((u) => (
+              <div key={u.email}
+                className="flex justify-between px-3 py-1.5 bg-zinc-900 rounded-lg cursor-pointer hover:bg-zinc-800 transition-colors"
+                onClick={() => { setEmail(u.email); setPassword("password"); }}
+              >
+                <span className="text-zinc-400">{u.email}</span>
+                <span className="text-zinc-600">{u.role}</span>
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-zinc-600 text-center mt-2">Click any row to autofill · Password: Test@1234</p>
+        </div>
+
       </div>
     </div>
   );
