@@ -113,7 +113,6 @@ const LoginPage = () => {
               </div>
             ))}
           </div>
-          <p className="text-xs text-zinc-600 text-center mt-2">Click any row to autofill · Password: Test@1234</p>
         </div>
 
       </div>
