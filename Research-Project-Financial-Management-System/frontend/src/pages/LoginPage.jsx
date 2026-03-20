@@ -106,7 +106,7 @@ const LoginPage = () => {
             ].map((u) => (
               <div key={u.email}
                 className="flex justify-between px-3 py-1.5 bg-zinc-900 rounded-lg cursor-pointer hover:bg-zinc-800 transition-colors"
-                onClick={() => { setEmail(u.email); setPassword("password"); }}
+                onClick={() => { setEmail(u.email); setPassword("Test@1234"); }}
               >
                 <span className="text-zinc-400">{u.email}</span>
                 <span className="text-zinc-600">{u.role}</span>
