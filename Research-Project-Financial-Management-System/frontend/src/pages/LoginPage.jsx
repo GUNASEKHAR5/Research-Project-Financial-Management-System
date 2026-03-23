@@ -102,7 +102,6 @@ const LoginPage = () => {
               { email: "arjun@university.edu",  role: "Admin" },
               { email: "priya@university.edu",  role: "Faculty" },
               { email: "ravi@university.edu",   role: "Finance" },
-              { email: "sneha@university.edu",  role: "Faculty" },
             ].map((u) => (
               <div key={u.email}
                 className="flex justify-between px-3 py-1.5 bg-zinc-900 rounded-lg cursor-pointer hover:bg-zinc-800 transition-colors"
